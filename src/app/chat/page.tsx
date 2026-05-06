@@ -40,12 +40,28 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="container" style={{ height: '100vh', display: 'flex', flexDirection: 'column', paddingBottom: '90px' }}>
-      <header style={{ marginBottom: '1.5rem', flexShrink: 0 }}>
-        <h1 className="title" style={{ fontSize: '1.5rem' }}>Health Chat</h1>
-        <p className="subtitle" style={{ marginBottom: '0' }}>Instant answers to your nutrition questions</p>
+    <div style={{ 
+      height: '100vh', 
+      maxHeight: '100vh',
+      display: 'flex', 
+      flexDirection: 'column', 
+      background: 'var(--background)',
+      position: 'relative',
+      overflow: 'hidden'
+    }}>
+      {/* Header */}
+      <header style={{ 
+        padding: '1.5rem', 
+        paddingBottom: '0.5rem', 
+        flexShrink: 0,
+        borderBottom: '1px solid var(--border)',
+        background: 'var(--background)'
+      }}>
+        <h1 className="title" style={{ fontSize: '1.5rem', marginBottom: '0.25rem' }}>Health Chat</h1>
+        <p className="subtitle" style={{ fontSize: '0.875rem', marginBottom: '0' }}>Instant nutrition answers</p>
       </header>
 
+      {/* Messages Area */}
       <div 
         ref={scrollRef}
         style={{ 
@@ -54,8 +70,9 @@ export default function ChatPage() {
           display: 'flex', 
           flexDirection: 'column', 
           gap: '1rem',
-          paddingBottom: '1rem',
-          paddingRight: '0.5rem'
+          padding: '1.5rem',
+          paddingBottom: '2rem',
+          scrollBehavior: 'smooth'
         }}
       >
         {messages.map((msg, i) => (
@@ -94,6 +111,7 @@ export default function ChatPage() {
               border: msg.role === 'user' ? 'none' : '1px solid var(--border)',
               borderTopRightRadius: msg.role === 'user' ? '0.25rem' : '1.25rem',
               borderTopLeftRadius: msg.role === 'user' ? '1.25rem' : '0.25rem',
+              boxShadow: '0 2px 4px rgba(0,0,0,0.02)'
             }}>
               {msg.content}
             </div>
@@ -104,37 +122,46 @@ export default function ChatPage() {
             <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'var(--secondary)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <Bot size={18} color="var(--primary)" />
             </div>
-            <div className="card" style={{ padding: '0.5rem 1rem', marginBottom: 0 }}>
+            <div style={{ padding: '0.5rem 1rem', background: 'var(--card)', borderRadius: '1rem', border: '1px solid var(--border)' }}>
               <span className="animate-pulse">...</span>
             </div>
           </div>
         )}
       </div>
 
-      <form 
-        onSubmit={handleSend}
-        style={{ 
-          marginTop: '1rem', 
-          display: 'flex', 
-          gap: '0.5rem', 
-          background: 'var(--card)', 
-          padding: '0.5rem', 
-          borderRadius: 'var(--radius)',
-          border: '1px solid var(--border)'
-        }}
-      >
-        <input 
-          className="input" 
-          style={{ marginBottom: 0, border: 'none', background: 'transparent' }} 
-          placeholder="Ask me anything..." 
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-        />
-        <button className="btn btn-primary" style={{ width: 'auto', padding: '0.5rem 1rem' }}>
-          <Send size={20} />
-        </button>
-      </form>
+      {/* Input Area */}
+      <div style={{ 
+        padding: '1rem', 
+        paddingBottom: 'calc(80px + env(safe-area-inset-bottom))', 
+        background: 'var(--background)',
+        borderTop: '1px solid var(--border)',
+        flexShrink: 0
+      }}>
+        <form 
+          onSubmit={handleSend}
+          style={{ 
+            display: 'flex', 
+            gap: '0.5rem', 
+            background: 'var(--secondary)', 
+            padding: '0.5rem', 
+            borderRadius: '1.5rem',
+            border: '1px solid var(--border)'
+          }}
+        >
+          <input 
+            className="input" 
+            style={{ marginBottom: 0, border: 'none', background: 'transparent' }} 
+            placeholder="Ask about your diet..." 
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+          />
+          <button className="btn btn-primary" style={{ width: '40px', height: '40px', padding: 0, borderRadius: '50%' }}>
+            <Send size={18} />
+          </button>
+        </form>
+      </div>
 
+      {/* Navigation */}
       <nav className="nav">
         <Link href="/scan" className="nav-item">
           <Camera size={24} />
@@ -152,3 +179,4 @@ export default function ChatPage() {
     </div>
   );
 }
+
