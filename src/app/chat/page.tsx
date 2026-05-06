@@ -18,9 +18,12 @@ export default function ChatPage() {
 
   useEffect(() => {
     if (scrollRef.current) {
-      scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      scrollRef.current.scrollTo({
+        top: scrollRef.current.scrollHeight,
+        behavior: 'smooth'
+      });
     }
-  }, [messages]);
+  }, [messages, loading]);
 
   const handleSend = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -37,8 +40,8 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="container" style={{ paddingBottom: '100px', height: '100vh', overflow: 'hidden' }}>
-      <header style={{ marginBottom: '1.5rem' }}>
+    <div className="container" style={{ height: '100vh', display: 'flex', flexDirection: 'column', paddingBottom: '90px' }}>
+      <header style={{ marginBottom: '1.5rem', flexShrink: 0 }}>
         <h1 className="title" style={{ fontSize: '1.5rem' }}>Health Chat</h1>
         <p className="subtitle" style={{ marginBottom: '0' }}>Instant answers to your nutrition questions</p>
       </header>
@@ -51,7 +54,8 @@ export default function ChatPage() {
           display: 'flex', 
           flexDirection: 'column', 
           gap: '1rem',
-          paddingBottom: '1rem'
+          paddingBottom: '1rem',
+          paddingRight: '0.5rem'
         }}
       >
         {messages.map((msg, i) => (
