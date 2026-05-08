@@ -45,7 +45,14 @@ export default function Home() {
         router.push('/onboarding');
       }
     } catch (err: any) {
-      setAuthError(err.message);
+      console.error('Firebase error:', err);
+      if (err.code === 'auth/configuration-not-found') {
+        setAuthError('Firebase Authentication is not enabled. Please go to the Firebase Console > Build > Authentication and click "Get Started".');
+      } else if (err.code === 'auth/invalid-api-key') {
+        setAuthError('Invalid Firebase API Key. Please check your firebase.ts configuration.');
+      } else {
+        setAuthError(err.message || 'An error occurred. Please check your credentials.');
+      }
     }
   };
 
