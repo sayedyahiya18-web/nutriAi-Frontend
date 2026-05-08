@@ -33,7 +33,6 @@ export async function generateHealthInsight(product: any, profile: any) {
     return await response.json();
   } catch (error) {
     console.error('Error generating insight:', error);
-    // Fallback data
     return {
       isSafe: true,
       warning: null,
@@ -82,7 +81,6 @@ export async function chatWithAI(message: string, profile: any, currentProduct: 
 }
 
 export async function fetchHealthNews(category: string = 'All') {
-  // Keeping news simple for now as it's a direct public API call often handled frontend
   const apiKey = process.env.NEXT_PUBLIC_NEWS_API_KEY;
   if (!apiKey) return [];
   const query = category === 'All' ? 'nutrition+OR+healthy+eating' : category.toLowerCase() + '+nutrition';
@@ -108,3 +106,21 @@ export async function fetchHealthNews(category: string = 'All') {
   }
 }
 
+export async function getLocationHealthAlerts(city: string) {
+  try {
+    const response = await fetch(`${API_BASE_URL}/chat/location-health`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ city })
+    });
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching location health:', error);
+    return {
+      heatwaveRisk: 'low',
+      waterGoalLitres: 2.5,
+      diseaseAlerts: [],
+      summary: 'Stay hydrated and eat balanced meals.'
+    };
+  }
+}
