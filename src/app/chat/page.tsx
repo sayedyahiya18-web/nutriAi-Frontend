@@ -8,6 +8,14 @@ import { Send, User, Bot, Camera, Calendar, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import ReactMarkdown from 'react-markdown';
 
+const markdownStyles = `
+  .markdown-content p { margin-bottom: 0.5rem; }
+  .markdown-content p:last-child { margin-bottom: 0; }
+  .markdown-content ul, .markdown-content ol { padding-left: 1.25rem; margin-bottom: 0.5rem; }
+  .markdown-content li { margin-bottom: 0.25rem; }
+  .markdown-content strong { font-weight: 700; }
+`;
+
 export default function ChatPage() {
   const { preferences } = useUser();
   const [messages, setMessages] = useState<{ role: 'user' | 'bot', content: string }[]>([
@@ -50,6 +58,7 @@ export default function ChatPage() {
       position: 'relative',
       overflow: 'hidden'
     }}>
+      <style>{markdownStyles}</style>
       {/* Header */}
       <header style={{ 
         padding: '1.5rem', 
