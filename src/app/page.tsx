@@ -37,6 +37,10 @@ export default function Home() {
     e.preventDefault();
     setAuthError(null);
     try {
+      if (!isLoginView && !city.trim()) {
+        setAuthError('City is mandatory for location-aware health insights.');
+        return;
+      }
       await login(email, password, !isLoginView, username, city);
       // If they have no preferences (newly signed up), they'll stay on onboarding logic
       if (isLoginView && preferences) {
@@ -111,9 +115,9 @@ export default function Home() {
             {!isLoginView && (
               <div style={{ marginBottom: '1rem' }}>
                 <label style={{ fontSize: '0.875rem', fontWeight: 600, marginLeft: '0.5rem', marginBottom: '0.5rem', display: 'block' }}>
-                  📍 Your City <span style={{ color: 'var(--muted)', fontWeight: 400 }}>(for health alerts)</span>
+                  📍 Your City <span style={{ color: 'var(--muted)', fontWeight: 400 }}>(mandatory for alerts)</span>
                 </label>
-                <input type="text" placeholder="e.g. Mumbai, India" className="input" value={city} onChange={e => setCity(e.target.value)} style={{ marginBottom: 0 }} />
+                <input type="text" placeholder="e.g. Mumbai, India" className="input" value={city} onChange={e => setCity(e.target.value)} required style={{ marginBottom: 0 }} />
               </div>
             )}
             <button type="submit" className="btn btn-primary" style={{ marginTop: '0.5rem' }} disabled={loading}>

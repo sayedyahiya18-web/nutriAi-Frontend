@@ -62,11 +62,13 @@ export type UserPreferences = {
   allergies: string[];
   conditions: string[];
   dietType: 'vegetarian' | 'non-veg' | 'vegan';
-  proteinGoal: number;
   routine: string;
   community: string | null;
   scanHistory: ScannedProduct[];
   exerciseGoal: ExerciseGoal;
+  weight?: number;
+  height?: number;
+  gender?: 'male' | 'female' | 'other';
 };
 
 type UserContextType = {
@@ -138,7 +140,6 @@ export function UserProvider({ children }: { children: React.ReactNode }) {
         allergies: [],
         conditions: [],
         dietType: 'non-veg',
-        proteinGoal: 60,
         routine: 'Sedentary',
         community: null,
         scanHistory: [],

@@ -12,6 +12,7 @@ export default function DietPlanPage() {
   const { preferences } = useUser();
   const [plan, setPlan] = useState<any>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
@@ -20,19 +21,43 @@ export default function DietPlanPage() {
       return;
     }
     
-    generateDietPlan(preferences).then(data => {
-      setPlan(data);
-      setLoading(false);
-    });
+    setLoading(true);
+    setError(null);
+    generateDietPlan(preferences)
+      .then(data => {
+        if (data && data.meals) {
+          setPlan(data);
+        } else {
+          setError('Failed to generate a valid diet plan. Please try again.');
+        }
+      })
+      .catch(err => {
+        console.error('Diet plan error:', err);
+        setError('An error occurred while generating your plan.');
+      })
+      .finally(() => setLoading(false));
   }, [preferences, router]);
 
   if (loading || !preferences) {
     return (
-      <div className="container" style={{ justifyContent: 'center', alignItems: 'center' }}>
+      <div className="container" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
         <div className="animate-spin">
           <Calendar size={48} color="var(--primary)" />
         </div>
-        <p style={{ marginTop: '1rem' }}>Generating your personalized plan...</p>
+        <p style={{ marginTop: '1rem', fontWeight: 600 }}>Generating your personalized plan...</p>
+      </div>
+    );
+  }
+
+  if (error || !plan) {
+    return (
+      <div className="container" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', height: '80vh' }}>
+        <div style={{ background: 'rgba(239,68,68,0.1)', padding: '2rem', borderRadius: '1.5rem', textAlign: 'center' }}>
+          <Calendar size={48} color="#ef4444" style={{ marginBottom: '1rem' }} />
+          <h2 style={{ marginBottom: '0.5rem' }}>Oops!</h2>
+          <p style={{ color: 'var(--muted)', marginBottom: '1.5rem' }}>{error || 'No plan available'}</p>
+          <button className="btn btn-primary" onClick={() => window.location.reload()}>Try Again</button>
+        </div>
       </div>
     );
   }
