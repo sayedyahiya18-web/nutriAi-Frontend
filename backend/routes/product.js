@@ -1,5 +1,4 @@
 const express = require('express');
-const axios = require('axios');
 const router = express.Router();
 const { calculateScore } = require('../utils/scoring');
 
@@ -11,18 +10,20 @@ router.get('/:barcode', async (req, res) => {
   try {
     const userProfile = profile ? JSON.parse(profile) : {};
     
-    // Fetch data from Open Food Facts
-    const response = await axios.get(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`, {
+    // Fetch data from Open Food Facts using native fetch
+    const response = await fetch(`https://world.openfoodfacts.org/api/v0/product/${barcode}.json`, {
       headers: {
         'User-Agent': 'NutriScanAI - Web - Version 1.0'
       }
     });
 
-    if (response.data.status === 0) {
+    const data = await response.json();
+
+    if (data.status === 0) {
       return res.status(404).json({ message: 'Product not found' });
     }
 
-    const product = response.data.product;
+    const product = data.product;
     const analysis = calculateScore(product, userProfile);
 
     res.json({

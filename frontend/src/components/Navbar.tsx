@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Camera, History, Utensils, MessageSquare, Newspaper } from 'lucide-react';
+import { LayoutDashboard, Camera, History, Utensils, MessageSquare, Newspaper, Users } from 'lucide-react';
 import { useUser } from '@/lib/user-context';
 
 export default function Navbar() {
@@ -15,7 +15,7 @@ export default function Navbar() {
     { name: 'Home', icon: LayoutDashboard, path: '/' },
     { name: 'Scanner', icon: Camera, path: '/scan' },
     { name: 'News', icon: Newspaper, path: '/news' },
-    { name: 'History', icon: History, path: '/history' },
+    { name: 'Community', icon: Users, path: '/community' },
     { name: 'Diet', icon: Utensils, path: '/diet-plan' },
     { name: 'Chat', icon: MessageSquare, path: '/chat' },
   ];
@@ -27,7 +27,7 @@ export default function Navbar() {
         const isActive = pathname === item.path;
         return (
           <Link key={item.name} href={item.path} className={`nav-item ${isActive ? 'active' : ''}`}>
-            <Icon size={24} />
+            <Icon size={22} />
             <span>{item.name}</span>
           </Link>
         );
